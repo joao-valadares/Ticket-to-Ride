@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">
+  <!-- Mapa político do Brasil simplificado -->
+  <g id="brazil-map">
+    <!-- Contorno do Brasil -->
+    <path d="M 400 50 L 450 60 L 500 80 L 550 110 L 580 150 L 600 200 L 610 250 L 615 300 L 610 350 L 600 400 L 580 450 L 550 500 L 520 550 L 500 600 L 480 650 L 460 700 L 440 750 L 420 800 L 400 820 L 380 800 L 360 750 L 340 700 L 320 650 L 300 600 L 280 550 L 260 500 L 240 450 L 230 400 L 220 350 L 220 300 L 230 250 L 250 200 L 280 150 L 320 110 L 360 80 L 380 60 Z" 
+          fill="#e8f5e9" 
+          stroke="#2e7d32" 
+          stroke-width="2"/>
+    
+    <!-- Região Norte -->
+    <path d="M 200 120 L 300 100 L 400 110 L 500 140 L 550 180 L 520 220 L 450 210 L 380 200 L 300 190 L 240 160 Z" 
+          fill="#c8e6c9" 
+          stroke="#4caf50" 
+          stroke-width="1" 
+          opacity="0.6"/>
+    
+    <!-- Região Nordeste -->
+    <path d="M 520 220 L 580 200 L 610 230 L 600 280 L 570 320 L 530 340 L 490 330 L 470 300 L 480 260 Z" 
+          fill="#fff9c4" 
+          stroke="#fbc02d" 
+          stroke-width="1" 
+          opacity="0.6"/>
+    
+    <!-- Região Centro-Oeste -->
+    <path d="M 300 300 L 400 280 L 470 300 L 490 370 L 450 430 L 380 450 L 320 430 L 280 380 Z" 
+          fill="#ffe0b2" 
+          stroke="#f57c00" 
+          stroke-width="1" 
+          opacity="0.6"/>
+    
+    <!-- Região Sudeste -->
+    <path d="M 380 450 L 450 430 L 490 450 L 510 490 L 500 530 L 460 550 L 420 540 L 380 520 Z" 
+          fill="#b3e5fc" 
+          stroke="#0288d1" 
+          stroke-width="1" 
+          opacity="0.6"/>
+    
+    <!-- Região Sul -->
+    <path d="M 320 550 L 380 520 L 420 540 L 440 580 L 430 630 L 400 680 L 360 700 L 320 680 L 300 640 L 290 590 Z" 
+          fill="#f8bbd0" 
+          stroke="#c2185b" 
+          stroke-width="1" 
+          opacity="0.6"/>
+  </g>
+</svg>
