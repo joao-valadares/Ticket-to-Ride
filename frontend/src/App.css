@@ -190,8 +190,8 @@
 /* Game Board */
 .game-container {
   display: grid;
-  grid-template-columns: 250px 1fr 250px;
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 280px;
+  grid-template-rows: auto 1fr;
   gap: 15px;
   height: 100vh;
   padding: 15px;
@@ -201,11 +201,32 @@
 .game-header {
   grid-column: 1 / -1;
   background: white;
-  padding: 15px;
+  padding: 15px 20px;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+}
+
+.header-left {
+  flex-shrink: 0;
+}
+
+.header-left h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.5rem;
+}
+
+.header-players {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.header-right {
+  flex-shrink: 0;
+  text-align: right;
 }
 
 .turn-indicator {
@@ -223,16 +244,18 @@
   50% { opacity: 0.6; }
 }
 
-.sidebar-left,
 .sidebar-right {
   background: white;
   border-radius: 10px;
   padding: 15px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .map-container {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
   background: white;
   border-radius: 10px;
@@ -241,29 +264,35 @@
   overflow: hidden;
 }
 
-.player-hand {
-  grid-column: 1 / -1;
-  background: white;
-  border-radius: 10px;
+.player-hand-sidebar {
+  background: #f8f9fa;
+  border-radius: 8px;
   padding: 15px;
-  max-height: 200px;
-  overflow-y: auto;
+  margin-top: auto;
+}
+
+.player-hand-sidebar h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #2c3e50;
 }
 
 .cards-container {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .train-card {
-  width: 80px;
-  height: 120px;
-  border-radius: 8px;
+  width: 55px;
+  height: 80px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: transform 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -436,11 +465,24 @@
   gap: 10px;
 }
 
+.players-panel.compact {
+  flex-direction: row;
+  gap: 15px;
+  overflow-x: auto;
+}
+
 .player-info {
   padding: 10px;
   background: #f8f9fa;
   border-radius: 8px;
   border-left: 4px solid;
+}
+
+.players-panel.compact .player-info {
+  min-width: 180px;
+  border-left: none;
+  border-top: 4px solid;
+  padding: 8px 12px;
 }
 
 .player-info.active {
@@ -454,6 +496,16 @@
   margin-top: 8px;
   font-size: 0.9rem;
   color: #666;
+}
+
+.players-panel.compact .player-stats {
+  font-size: 0.75rem;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.players-panel.compact .player-stats span {
+  white-space: nowrap;
 }
 
 /* Deck */
@@ -584,22 +636,31 @@
 /* Responsive */
 @media (max-width: 1200px) {
   .game-container {
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 1fr 240px;
+  }
+  
+  .train-card {
+    width: 45px;
+    height: 65px;
   }
 }
 
 @media (max-width: 968px) {
   .game-container {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr auto auto;
+    grid-template-rows: auto 1fr auto;
   }
   
-  .sidebar-left,
   .sidebar-right {
     grid-column: 1;
+    max-height: 250px;
   }
   
   .map-container {
     grid-column: 1;
+  }
+  
+  .header-players {
+    display: none;
   }
 }

@@ -234,34 +234,36 @@ function Game({ playerName, initialGameState }) {
 
   return (
     <div className="game-container">
-      {/* Header */}
+      {/* Header com informações do jogo e jogadores */}
       <div className="game-header">
-        <div>
+        <div className="header-left">
           <h2>Ticket to Ride - Brasil</h2>
-          <p style={{ color: '#7f8c8d' }}>Código: {gameId}</p>
+          <p style={{ color: '#7f8c8d', margin: 0 }}>Código: {gameId}</p>
         </div>
-        <div className={`turn-indicator ${isMyTurn() ? 'your-turn' : ''}`}>
-          {isMyTurn() ? '🎯 SUA VEZ!' : `Turno de ${game.currentPlayer.name}`}
+        
+        <div className="header-players">
+          <PlayersPanel 
+            players={game.players}
+            currentPlayerId={game.currentPlayer.id}
+            compact={true}
+          />
         </div>
-        <div>
+        
+        <div className="header-right">
+          <div className={`turn-indicator ${isMyTurn() ? 'your-turn' : ''}`}>
+            {isMyTurn() ? '🎯 SUA VEZ!' : `Turno de ${game.currentPlayer.name}`}
+          </div>
           <button 
             onClick={() => navigate('/')}
             className="btn-danger"
+            style={{ marginTop: '8px' }}
           >
             Sair
           </button>
         </div>
       </div>
 
-      {/* Sidebar Esquerda - Jogadores */}
-      <div className="sidebar-left">
-        <PlayersPanel 
-          players={game.players}
-          currentPlayerId={game.currentPlayer.id}
-        />
-      </div>
-
-      {/* Mapa Central */}
+      {/* Mapa - Ocupa todo espaço disponível */}
       <div className="map-container">
         <GameBoard 
           routes={game.routes}
@@ -272,7 +274,7 @@ function Game({ playerName, initialGameState }) {
         />
       </div>
 
-      {/* Sidebar Direita - Baralhos */}
+      {/* Sidebar Direita - Baralhos e Mão do Jogador */}
       <div className="sidebar-right">
         <DeckArea 
           trainCardDeck={game.trainCardDeck}
@@ -282,16 +284,15 @@ function Game({ playerName, initialGameState }) {
           canInteract={isMyTurn()}
           myTickets={myTickets}
         />
-      </div>
-
-      {/* Mão do Jogador */}
-      <div className="player-hand">
-        <h3 style={{ marginBottom: '10px' }}>Suas Cartas ({myCards.length})</h3>
-        <PlayerHand 
-          cards={myCards}
-          selectedCards={selectedCards}
-          onCardSelect={handleCardSelect}
-        />
+        
+        <div className="player-hand-sidebar">
+          <h3 style={{ marginBottom: '10px' }}>Suas Cartas ({myCards.length})</h3>
+          <PlayerHand 
+            cards={myCards}
+            selectedCards={selectedCards}
+            onCardSelect={handleCardSelect}
+          />
+        </div>
       </div>
 
       {/* Notificação */}

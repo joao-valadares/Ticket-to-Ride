@@ -1,9 +1,9 @@
 import React from 'react';
 
-function PlayersPanel({ players, currentPlayerId }) {
+function PlayersPanel({ players, currentPlayerId, compact = false }) {
   return (
-    <div className="players-panel">
-      <h3 style={{ marginBottom: '15px' }}>Jogadores</h3>
+    <div className={`players-panel ${compact ? 'compact' : ''}`}>
+      {!compact && <h3 style={{ marginBottom: '15px' }}>Jogadores</h3>}
       {players.map((player) => (
         <div 
           key={player.id}
