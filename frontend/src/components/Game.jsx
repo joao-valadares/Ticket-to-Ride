@@ -14,6 +14,8 @@ function Game({ playerName, initialGameState }) {
   const [myTickets, setMyTickets] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [drawnTickets, setDrawnTickets] = useState([]);
+  const [selectedTickets, setSelectedTickets] = useState([]);
 
   useEffect(() => {
     console.log('Componente Game montado para gameId:', gameId);
@@ -61,12 +63,18 @@ function Game({ playerName, initialGameState }) {
 
     // Bilhetes de destino
     socketService.on('destinationTicketsDrawn', (data) => {
-      // Aqui você pode abrir um modal para o jogador escolher os bilhetes
-      showNotification('Escolha seus bilhetes de destino', 'info');
+      console.log('Bilhetes de destino recebidos:', data.tickets);
+      setDrawnTickets(data.tickets);
+      // Marcar todos como selecionados inicialmente (jogador pode desmarcar)
+      setSelectedTickets(data.tickets.map((_, index) => index));
+      showNotification('Escolha pelo menos 1 bilhete de destino', 'info');
     });
 
     socketService.on('destinationTicketsKept', (data) => {
       setMyTickets(data.destinationTickets);
+      setDrawnTickets([]);
+      setSelectedTickets([]);
+      showNotification('Bilhetes de destino adicionados!', 'success');
     });
 
     // Fim do jogo
@@ -212,6 +220,31 @@ function Game({ playerName, initialGameState }) {
     });
   };
 
+  const handleTicketToggle = (index) => {
+    setSelectedTickets(prev => {
+      if (prev.includes(index)) {
+        return prev.filter(i => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  const handleConfirmTickets = () => {
+    if (selectedTickets.length < 1) {
+      showNotification('Você deve manter pelo menos 1 bilhete!', 'error');
+      return;
+    }
+
+    const ticketsToKeep = selectedTickets.map(index => drawnTickets[index]);
+    const ticketsToReturn = drawnTickets.filter((_, index) => !selectedTickets.includes(index));
+
+    console.log('Mantendo bilhetes:', ticketsToKeep);
+    console.log('Devolvendo bilhetes:', ticketsToReturn);
+
+    socketService.returnDestinationTickets(ticketsToReturn, ticketsToKeep);
+  };
+
   const isMyTurn = () => {
     if (!game) return false;
     return game.currentPlayer.id === socketService.socket.id;
@@ -294,6 +327,68 @@ function Game({ playerName, initialGameState }) {
           />
         </div>
       </div>
+
+      {/* Modal de Bilhetes de Destino */}
+      {drawnTickets.length > 0 && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '600px' }}>
+            <h2>Escolha seus Bilhetes de Destino</h2>
+            <p style={{ color: '#7f8c8d', marginBottom: '20px' }}>
+              Você deve manter pelo menos 1 bilhete. Clique para selecionar/desselecionar.
+            </p>
+            
+            <div className="tickets-selection">
+              {drawnTickets.map((ticket, index) => (
+                <div
+                  key={index}
+                  className={`destination-ticket-modal ${selectedTickets.includes(index) ? 'selected' : ''}`}
+                  onClick={() => handleTicketToggle(index)}
+                  style={{
+                    cursor: 'pointer',
+                    padding: '15px',
+                    margin: '10px 0',
+                    border: selectedTickets.includes(index) ? '3px solid #27ae60' : '2px solid #95a5a6',
+                    borderRadius: '8px',
+                    background: selectedTickets.includes(index) ? '#d4edda' : '#ecf0f1',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <strong style={{ fontSize: '1.1rem' }}>{ticket.from} → {ticket.to}</strong>
+                      <div style={{ color: '#7f8c8d', fontSize: '0.9rem', marginTop: '5px' }}>
+                        Pontos: {ticket.points}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '1.5rem' }}>
+                      {selectedTickets.includes(index) ? '✅' : '⬜'}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <p style={{ marginBottom: '10px', color: selectedTickets.length < 1 ? '#e74c3c' : '#27ae60' }}>
+                <strong>{selectedTickets.length}</strong> de {drawnTickets.length} bilhetes selecionados
+              </p>
+              <button
+                onClick={handleConfirmTickets}
+                className="btn-primary"
+                disabled={selectedTickets.length < 1}
+                style={{
+                  padding: '12px 30px',
+                  fontSize: '1rem',
+                  opacity: selectedTickets.length < 1 ? 0.5 : 1,
+                  cursor: selectedTickets.length < 1 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Confirmar Seleção
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Notificação */}
       {notification && (

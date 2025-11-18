@@ -633,6 +633,26 @@
   flex: 1;
 }
 
+/* Seleção de Bilhetes de Destino */
+.tickets-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.destination-ticket-modal {
+  transition: all 0.2s ease;
+}
+
+.destination-ticket-modal:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.destination-ticket-modal.selected {
+  animation: pulse 0.3s ease;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .game-container {
