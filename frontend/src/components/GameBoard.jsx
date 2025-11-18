@@ -1,28 +1,46 @@
 import React from 'react';
 
-// Importar dados do mapa
-const cities = [
-  { id: 'manaus', name: 'Manaus', x: 30, y: 15 },
-  { id: 'belem', name: 'Belém', x: 50, y: 18 },
-  { id: 'fortaleza', name: 'Fortaleza', x: 70, y: 22 },
-  { id: 'natal', name: 'Natal', x: 75, y: 25 },
-  { id: 'recife', name: 'Recife', x: 75, y: 30 },
-  { id: 'salvador', name: 'Salvador', x: 70, y: 42 },
-  { id: 'brasilia', name: 'Brasília', x: 50, y: 45 },
-  { id: 'goiania', name: 'Goiânia', x: 48, y: 48 },
-  { id: 'belo-horizonte', name: 'Belo Horizonte', x: 62, y: 52 },
-  { id: 'rio-de-janeiro', name: 'Rio de Janeiro', x: 65, y: 58 },
-  { id: 'sao-paulo', name: 'São Paulo', x: 55, y: 60 },
-  { id: 'curitiba', name: 'Curitiba', x: 52, y: 65 },
-  { id: 'florianopolis', name: 'Florianópolis', x: 55, y: 70 },
-  { id: 'porto-alegre', name: 'Porto Alegre', x: 50, y: 78 },
-  { id: 'campo-grande', name: 'Campo Grande', x: 42, y: 52 },
-  { id: 'cuiaba', name: 'Cuiabá', x: 38, y: 45 },
-  { id: 'porto-velho', name: 'Porto Velho', x: 28, y: 30 },
-  { id: 'rio-branco', name: 'Rio Branco', x: 18, y: 32 }
-];
+// =========================================================================
+// GAMEBOARD - RENDERIZAÇÃO DO MAPA DO BRASIL
+// =========================================================================
+// 
+// SISTEMA DE COORDENADAS:
+// - Recebe cities[] e routes[] do backend via props
+// - Coordenadas em PERCENTUAL (0-100) relativas ao container .brasil-map
+// - Cidades: posicionadas com position: absolute usando left/top em %
+// - Rotas: linhas conectando duas cidades, calculadas dinamicamente
+// 
+// CÁLCULO DE POSICIONAMENTO DAS ROTAS:
+// 1. dx = x2 - x1 (diferença horizontal)
+// 2. dy = y2 - y1 (diferença vertical)
+// 3. length = √(dx² + dy²) (teorema de Pitágoras)
+// 4. angle = atan2(dy, dx) * 180/π (ângulo em graus)
+// 5. Aplicar: transform: rotate(angle) com transformOrigin: '0 50%'
+// 
+// PARA AJUSTAR POSIÇÕES:
+// - Edite backend/src/data/brasilMap.js
+// - Ajuste coordenadas x,y das cidades
+// - As rotas se recalcularão automaticamente
+// - NÃO ajuste as rotas diretamente
+// =========================================================================
 
-function GameBoard({ routes, onClaimRoute, canInteract, selectedCards }) {
+function GameBoard({ routes, cities = [], onClaimRoute, canInteract, selectedCards }) {
+  // Validação: se cities não foi fornecido, retornar mensagem de erro
+  if (!cities || cities.length === 0) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100%',
+        color: '#e74c3c',
+        fontWeight: 'bold'
+      }}>
+        Aguardando dados do mapa...
+      </div>
+    );
+  }
+
   const getCityPosition = (cityId) => {
     const city = cities.find(c => c.id === cityId);
     return city ? { x: city.x, y: city.y } : { x: 50, y: 50 };
@@ -32,10 +50,11 @@ function GameBoard({ routes, onClaimRoute, canInteract, selectedCards }) {
     const city1Pos = getCityPosition(route.city1);
     const city2Pos = getCityPosition(route.city2);
 
-    const dx = city2Pos.x - city1Pos.x;
-    const dy = city2Pos.y - city1Pos.y;
-    const length = Math.sqrt(dx * dx + dy * dy);
-    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    // Cálculo da linha conectando duas cidades
+    const dx = city2Pos.x - city1Pos.x;  // Diferença horizontal
+    const dy = city2Pos.y - city1Pos.y;  // Diferença vertical
+    const length = Math.sqrt(dx * dx + dy * dy);  // Comprimento (Pitágoras)
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);  // Ângulo de rotação
 
     const colorMap = {
       red: '#e74c3c',

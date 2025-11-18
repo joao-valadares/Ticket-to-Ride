@@ -1,7 +1,7 @@
 import { Player } from './Player.js';
 import { Deck } from './Deck.js';
 import { DestinationTicketDeck } from './DestinationTicketDeck.js';
-import { routes, destinationTickets } from '../data/brasilMap.js';
+import { routes, destinationTickets, cities } from '../data/brasilMap.js';
 
 export class Game {
   constructor(gameId, hostPlayer) {
@@ -407,6 +407,7 @@ export class Game {
       trainCardDeck: this.trainCardDeck.toJSON(),
       destinationTicketDeck: this.destinationTicketDeck.toJSON(),
       routes: this.routes,
+      cities: cities,
       gameState: this.gameState,
       lastRound: this.lastRound,
       winner: this.gameState === 'finished' ? this.players[0] : null

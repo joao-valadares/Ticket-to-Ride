@@ -278,7 +278,18 @@
   transform: translateY(-10px);
 }
 
-/* Map */
+/* =========================================================================
+   MAPA DO BRASIL - Container principal
+   ========================================================================= 
+   
+   Este é o container que serve como referência para todas as coordenadas
+   percentuais (x%, y%) das cidades e rotas.
+   
+   IMPORTANTE: 
+   - Todas as coordenadas em brasilMap.js são relativas a este container
+   - Alterar width/height afeta as proporções do mapa
+   - O SVG de fundo é apenas visual, não afeta coordenadas
+*/
 .brasil-map {
   width: 100%;
   height: 100%;
@@ -290,6 +301,17 @@
   overflow: hidden;
 }
 
+/* =========================================================================
+   CIDADES - Pontos no mapa
+   ========================================================================= 
+   
+   Posicionamento aplicado via JavaScript inline styles:
+   - left: ${city.x}% (coordenada horizontal)
+   - top: ${city.y}% (coordenada vertical)
+   - transform: translate(-50%, -50%) (centraliza o círculo no ponto)
+   
+   O transform é crucial para centralizar o círculo de 28px nas coordenadas.
+*/
 .city {
   position: absolute;
   width: 28px;
@@ -354,6 +376,23 @@
   border-top-color: rgba(44, 62, 80, 0.95);
 }
 
+/* =========================================================================
+   ROTAS - Linhas conectando cidades
+   ========================================================================= 
+   
+   Posicionamento calculado dinamicamente em GameBoard.jsx:
+   - left: ${city1.x}% (inicia na primeira cidade)
+   - top: ${city1.y}%
+   - width: ${length}% (distância calculada entre cidades)
+   - height: 8-10px (espessura fixa da linha)
+   - transform: rotate(${angle}deg) (ângulo calculado por atan2)
+   - transformOrigin: '0 50%' (rotação a partir do ponto inicial esquerdo)
+   
+   IMPORTANTE:
+   - A rotação acontece a partir do ponto (0, 50%) = canto esquerdo central
+   - Por isso a linha inicia em city1 e "aponta" para city2
+   - Não tente ajustar rotas diretamente, ajuste as coordenadas das cidades
+*/
 .route {
   position: absolute;
   height: 10px;

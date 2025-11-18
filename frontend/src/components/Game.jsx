@@ -265,6 +265,7 @@ function Game({ playerName, initialGameState }) {
       <div className="map-container">
         <GameBoard 
           routes={game.routes}
+          cities={game.cities || []}
           onClaimRoute={handleClaimRoute}
           canInteract={isMyTurn()}
           selectedCards={selectedCards}
