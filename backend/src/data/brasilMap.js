@@ -8,6 +8,9 @@
 // =========================================================================
 // COORDENADAS DAS CIDADES
 // =========================================================================
+
+import { Route } from '../models/Route.js';
+import { DestinationTicket } from '../models/DestinationTicket.js';
 // 
 // SISTEMA DE COORDENADAS:
 // - x: Posição horizontal (0 = esquerda, 100 = direita) em %
@@ -116,7 +119,7 @@ export const cities = [
 // - length: número de vagões necessários para reivindicar
 // =========================================================================
 
-export const routes = [
+const routeData = [
   // Norte
   { id: 'r1', city1: 'manaus', city2: 'belem', color: 'green', length: 6 },
   { id: 'r2', city1: 'manaus', city2: 'porto-velho', color: 'orange', length: 5 },
@@ -154,8 +157,11 @@ export const routes = [
   { id: 'r25', city1: 'curitiba', city2: 'porto-alegre', color: 'orange', length: 4 }
 ];
 
+// Criar instâncias de Route
+export const routes = routeData.map(r => new Route(r.id, r.city1, r.city2, r.color, r.length));
+
 // Bilhetes de destino (objetivos secretos)
-export const destinationTickets = [
+const destinationTicketData = [
   // Longa distância (alto valor)
   { id: 't1', from: 'manaus', to: 'porto-alegre', points: 20 },
   { id: 't2', from: 'rio-branco', to: 'recife', points: 20 },
@@ -189,6 +195,9 @@ export const destinationTickets = [
   { id: 't24', from: 'fortaleza', to: 'salvador', points: 9 },
   { id: 't25', from: 'campo-grande', to: 'sao-paulo', points: 10 }
 ];
+
+// Criar instâncias de DestinationTicket
+export const destinationTickets = destinationTicketData.map(t => new DestinationTicket(t.id, t.from, t.to, t.points));
 
 // Função auxiliar para encontrar uma cidade pelo ID
 export function getCityById(cityId) {

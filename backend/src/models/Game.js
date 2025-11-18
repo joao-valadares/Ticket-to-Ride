@@ -1,6 +1,7 @@
 import { Player } from './Player.js';
 import { Deck } from './Deck.js';
 import { DestinationTicketDeck } from './DestinationTicketDeck.js';
+import { Route } from './Route.js';
 import { routes, destinationTickets, cities } from '../data/brasilMap.js';
 
 export class Game {
@@ -10,10 +11,8 @@ export class Game {
     this.currentPlayerIndex = 0;
     this.trainCardDeck = new Deck();
     this.destinationTicketDeck = new DestinationTicketDeck(destinationTickets);
-    this.routes = routes.map(route => ({
-      ...route,
-      claimedBy: null
-    }));
+    // Clonar as rotas para esta instância do jogo
+    this.routes = routes.map(route => new Route(route.id, route.city1, route.city2, route.color, route.length));
     this.gameState = 'waiting'; // waiting, playing, finished
     this.lastRound = false;
     this.finalTurnPlayer = null;
@@ -165,7 +164,7 @@ export class Game {
     console.log('  Cor da rota:', route.color);
     console.log('  Tamanho:', route.length);
     
-    if (route.claimedBy) {
+    if (route.isClaimed()) {
       throw new Error('Rota já foi reivindicada');
     }
     
@@ -215,8 +214,8 @@ export class Game {
     // Descartar cartas usadas
     this.trainCardDeck.discardCards(cardsUsed);
     
-    // Reivindicar rota
-    route.claimedBy = playerId;
+    // Reivindicar rota usando o método da classe Route
+    route.claim(playerId);
     player.claimRoute(route);
     
     console.log('  🎉 Rota reivindicada com sucesso!');
